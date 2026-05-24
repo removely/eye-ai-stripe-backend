@@ -29,30 +29,21 @@ export default async function handler(req, res) {
           product_data: {
             name: 'Eye AI – Try & Buy',
           },
-          unit_amount: 4999, // 49,99€ in Cent
+          unit_amount: 4999,
         },
         quantity: 1,
       }],
 
-      // Karte für zukünftige Abbuchungen speichern
       payment_intent_data: {
         setup_future_usage: 'off_session',
       },
 
-      // EINE Adresse (Rechnung = Lieferung)
       billing_address_collection: 'required',
 
-      // Telefonnummer Pflicht
       phone_number_collection: {
         enabled: true,
       },
 
-      // AGB-Pflicht-Checkbox
-      consent_collection: {
-        terms_of_service: 'required',
-      },
-
-      // Metadata für Webhook
       metadata: {
         flow: 'try_and_buy',
         restzahlung_price_id: RESTZAHLUNG_PRICE_ID,
