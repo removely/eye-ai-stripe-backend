@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // 👇 NEUE 50€ Price-ID hier eintragen!
-const RESTZAHLUNG_PRICE_ID = 'price_1TaafDHRgmyzxSIncG8YFKVo';
+const RESTZAHLUNG_PRICE_ID = 'price_1TahnIHRgmyzxSInhDPavGrQ';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
