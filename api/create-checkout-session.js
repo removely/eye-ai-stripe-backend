@@ -30,7 +30,7 @@ export default async function handler(req, res) {
         price_data: {
           currency: 'eur',
           product_data: {
-            name: 'Eye AI Smart Glasses – Anzahlung',
+            name: 'Eye AI – Try & Buy sichern',
           },
           unit_amount: 4999,
         },
