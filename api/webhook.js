@@ -3,9 +3,7 @@ import Stripe from 'stripe';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const config = {
-  api: {
-    bodyParser: false, // Stripe braucht den raw body für Signatur-Check
-  },
+  api: { bodyParser: false },
 };
 
 async function getRawBody(req) {
@@ -34,30 +32,45 @@ export default async function handler(req, res) {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  // Wenn Checkout erfolgreich → Subscription Schedule mit Payment Method verknüpfen
+  // Bei erfolgreicher Zahlung → Subscription Schedule erstellen
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-    const scheduleId = session.metadata?.subscription_schedule_id;
-    const customerId = session.metadata?.customer_id;
+    
+    // Nur für Try-and-Buy-Flow
+    if (session.metadata?.flow !== 'try_and_buy') {
+      return res.status(200).json({ received: true });
+    }
 
-    if (scheduleId && customerId) {
-      try {
-        // Hole die Payment Intent, um die verwendete Karte zu finden
-        const paymentIntent = await stripe.paymentIntents.retrieve(
-          session.payment_intent
-        );
-        const paymentMethodId = paymentIntent.payment_method;
+    const customerId = session.customer;
+    const restzahlungPriceId = session.metadata.restzahlung_price_id;
 
-        // Karte als Default für den Customer setzen
-        await stripe.customers.update(customerId, {
-          invoice_settings: { default_payment_method: paymentMethodId },
-        });
+    try {
+      // 1. Payment Method aus der erfolgreichen Zahlung holen
+      const paymentIntent = await stripe.paymentIntents.retrieve(session.payment_intent);
+      const paymentMethodId = paymentIntent.payment_method;
 
-        console.log(`✅ Subscription Schedule ${scheduleId} ist bereit. 
-          Karte ${paymentMethodId} gespeichert für Customer ${customerId}.`);
-      } catch (err) {
-        console.error('Fehler beim Verknüpfen:', err);
-      }
+      // 2. Karte als Standard-Zahlungsmethode für Customer setzen
+      await stripe.customers.update(customerId, {
+        invoice_settings: { default_payment_method: paymentMethodId },
+      });
+
+      // 3. Subscription Schedule erstellen: 14 Tage Trial → 3x 50€
+      const trialEnd = Math.floor(Date.now() / 1000) + (14 * 24 * 60 * 60);
+      
+      const schedule = await stripe.subscriptionSchedules.create({
+        customer: customerId,
+        start_date: trialEnd,
+        end_behavior: 'cancel',
+        phases: [{
+          items: [{ price: restzahlungPriceId, quantity: 1 }],
+          iterations: 3,
+          default_payment_method: paymentMethodId,
+        }],
+      });
+
+      console.log(`✅ Schedule ${schedule.id} angelegt für Customer ${customerId}`);
+    } catch (err) {
+      console.error('Fehler beim Schedule-Erstellen:', err);
     }
   }
 
