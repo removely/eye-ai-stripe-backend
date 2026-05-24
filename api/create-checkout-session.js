@@ -38,8 +38,9 @@ payment_method_types: ['card', 'paypal'],
         setup_future_usage: 'off_session',
       },
 
-      billing_address_collection: 'required',
-
+shipping_address_collection: {
+  allowed_countries: ['DE', 'AT', 'CH'],
+},
       phone_number_collection: {
         enabled: true,
       },
