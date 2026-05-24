@@ -27,7 +27,7 @@ export default async function handler(req, res) {
         price_data: {
           currency: 'eur',
           product_data: {
-            name: 'Eye AI – Try & Buy',
+            name: 'ㅤ',
           },
           unit_amount: 4999,
         },
