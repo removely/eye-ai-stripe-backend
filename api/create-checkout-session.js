@@ -12,8 +12,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const origin = req.headers.origin || 'https://removely.de';
-
+const origin = (req.headers.origin && req.headers.origin.startsWith('http')) ? req.headers.origin : 'https://removely.de';
     const session = await stripe.checkout.sessions.create({
       ui_mode: 'embedded',
       line_items: [{
