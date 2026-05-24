@@ -47,27 +47,10 @@ export default async function handler(req, res) {
         enabled: true,
       },
 
-      // Rabattcode-Feld
-      allow_promotion_codes: true,
-
-      // Newsletter + AGB Zustimmung
+      // AGB-Pflicht-Checkbox
       consent_collection: {
-        promotions: 'auto',
         terms_of_service: 'required',
       },
-
-      // Versandart anzeigen
-      shipping_options: [{
-        shipping_rate_data: {
-          type: 'fixed_amount',
-          fixed_amount: { amount: 0, currency: 'eur' },
-          display_name: 'DHL Express (1-3 Werktage)',
-          delivery_estimate: {
-            minimum: { unit: 'business_day', value: 1 },
-            maximum: { unit: 'business_day', value: 3 },
-          },
-        },
-      }],
 
       // Metadata für Webhook
       metadata: {
