@@ -1,0 +1,8 @@
+{
+  "name": "eye-ai-stripe-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "stripe": "^17.5.0"
+  }
+}
