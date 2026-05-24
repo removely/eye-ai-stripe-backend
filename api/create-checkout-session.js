@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     const session = await stripe.checkout.sessions.create({
       ui_mode: 'embedded',
       mode: 'payment',
-      payment_method_types: ['card', 'paypal'],
+payment_method_types: ['card'],
       
       // Customer wird automatisch erstellt wenn nötig (über E-Mail-Eingabe im Checkout)
       customer_creation: 'always',
