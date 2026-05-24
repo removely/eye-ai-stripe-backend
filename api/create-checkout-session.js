@@ -2,8 +2,8 @@ import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// 👇 NEUE 50€ Price-ID hier eintragen!
-const RESTZAHLUNG_PRICE_ID = 'price_1TahnIHRgmyzxSInhDPavGrQ';
+// 👇 HIER deine Price-ID der 49,99€-Monatsrate eintragen
+const RESTZAHLUNG_PRICE_ID = 'price_1TaaFDHRgmyzxSIncG8YFKVo';
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -17,37 +17,64 @@ export default async function handler(req, res) {
     const origin = (req.headers.origin && req.headers.origin.startsWith('http'))
       ? req.headers.origin : 'https://removely.de';
 
-    // NUR Checkout Session erstellen – KEIN Customer/Schedule vorab
     const session = await stripe.checkout.sessions.create({
       ui_mode: 'embedded',
       mode: 'payment',
-payment_method_types: ['card'],
-      
-      // Customer wird automatisch erstellt wenn nötig (über E-Mail-Eingabe im Checkout)
+      payment_method_types: ['card'],
       customer_creation: 'always',
-      
+
       line_items: [{
         price_data: {
           currency: 'eur',
           product_data: {
-            name: 'Eye AI – Try & Buy sichern',
+            name: 'Eye AI – Try & Buy',
           },
-          unit_amount: 4999,
+          unit_amount: 4999, // 49,99€ in Cent
         },
         quantity: 1,
       }],
-      
-      // WICHTIG: Karte für zukünftige Abbuchungen speichern
+
+      // Karte für zukünftige Abbuchungen speichern
       payment_intent_data: {
         setup_future_usage: 'off_session',
       },
-      
-      // Metadata: damit der Webhook weiß, dass er einen Schedule anlegen soll
+
+      // EINE Adresse (Rechnung = Lieferung)
+      billing_address_collection: 'required',
+
+      // Telefonnummer Pflicht
+      phone_number_collection: {
+        enabled: true,
+      },
+
+      // Rabattcode-Feld
+      allow_promotion_codes: true,
+
+      // Newsletter + AGB Zustimmung
+      consent_collection: {
+        promotions: 'auto',
+        terms_of_service: 'required',
+      },
+
+      // Versandart anzeigen
+      shipping_options: [{
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: { amount: 0, currency: 'eur' },
+          display_name: 'DHL Express (1-3 Werktage)',
+          delivery_estimate: {
+            minimum: { unit: 'business_day', value: 1 },
+            maximum: { unit: 'business_day', value: 3 },
+          },
+        },
+      }],
+
+      // Metadata für Webhook
       metadata: {
         flow: 'try_and_buy',
         restzahlung_price_id: RESTZAHLUNG_PRICE_ID,
       },
-      
+
       return_url: `${origin}/pages/danke?session_id={CHECKOUT_SESSION_ID}`,
     });
 
