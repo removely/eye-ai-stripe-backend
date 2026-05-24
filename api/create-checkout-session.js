@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     const session = await stripe.checkout.sessions.create({
       ui_mode: 'embedded',
       mode: 'payment',
-      payment_method_types: ['card'],
+payment_method_types: ['card', 'paypal'],
       customer_creation: 'always',
 
       line_items: [{
