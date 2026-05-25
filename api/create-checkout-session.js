@@ -50,7 +50,7 @@ export default async function handler(req, res) {
       // 👇 NEU: Eigener Text unter dem Pay-Button
       custom_text: {
         submit: {
-          message: '',
+          message: 'test',
         },
       },
 
