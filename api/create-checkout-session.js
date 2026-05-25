@@ -50,7 +50,7 @@ export default async function handler(req, res) {
       // 👇 NEU: Eigener Text unter dem Pay-Button
       custom_text: {
         submit: {
-          message: 'Mit der Bestätigung Ihrer Zahlung erklären Sie sich damit einverstanden, dass Removely Ihnen diese und jeweils drei monatliche Zahlungen in Höhe von 49,99 EUR gemäß den AGB belastet. Die Testphase beginnt ab Erhalt. Es gilt zudem das gesetzliche Widerrufsrecht.',
+          message: '',
         },
       },
 
