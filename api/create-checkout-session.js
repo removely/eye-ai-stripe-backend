@@ -20,8 +20,9 @@ export default async function handler(req, res) {
     const session = await stripe.checkout.sessions.create({
       ui_mode: 'embedded',
       mode: 'payment',
-payment_method_types: ['card', 'paypal'],
+      payment_method_types: ['card', 'paypal'],
       customer_creation: 'always',
+      locale: 'de',
 
       line_items: [{
         price_data: {
@@ -38,11 +39,19 @@ payment_method_types: ['card', 'paypal'],
         setup_future_usage: 'off_session',
       },
 
-shipping_address_collection: {
-  allowed_countries: ['DE', 'AT', 'CH'],
-},
+      shipping_address_collection: {
+        allowed_countries: ['DE', 'AT', 'CH'],
+      },
+
       phone_number_collection: {
         enabled: true,
+      },
+
+      // 👇 NEU: Eigener Text unter dem Pay-Button
+      custom_text: {
+        submit: {
+          message: 'Mit der Bestätigung Ihrer Zahlung erklären Sie sich damit einverstanden, dass Removely Ihnen diese und jeweils drei monatliche Zahlungen in Höhe von 49,99 EUR gemäß den AGB belastet. Die Testphase beginnt ab Erhalt. Es gilt zudem das gesetzliche Widerrufsrecht.',
+        },
       },
 
       metadata: {
