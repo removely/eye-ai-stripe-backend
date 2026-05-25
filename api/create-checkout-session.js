@@ -27,7 +27,7 @@ payment_method_types: ['card', 'paypal'],
         price_data: {
           currency: 'eur',
           product_data: {
-            name: 'ㅤ',
+            name: 'JETZT RISIKOFREI TESTEN FÜR:',
           },
           unit_amount: 4999,
         },
