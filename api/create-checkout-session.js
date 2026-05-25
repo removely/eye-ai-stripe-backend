@@ -47,13 +47,6 @@ export default async function handler(req, res) {
         enabled: true,
       },
 
-      // 👇 NEU: Eigener Text unter dem Pay-Button
-      custom_text: {
-        submit: {
-          message: 'test',
-        },
-      },
-
       metadata: {
         flow: 'try_and_buy',
         restzahlung_price_id: RESTZAHLUNG_PRICE_ID,
