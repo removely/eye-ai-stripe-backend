@@ -1,8 +1,8 @@
-import Stripe from 'stripe';
+import Stripe from 'stripe'; 
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// 👇 OFFERS: Hier kannst du beliebig viele Try-and-Buy Varianten definieren
+// OFFERS: Hier sind deine Try-and-Buy Varianten definiert
 const OFFERS = {
   // Standard Offer: 49,99€ Anzahlung + 14 Tage Trial + 3x 49,99€
   'try_and_buy': {
@@ -14,17 +14,15 @@ const OFFERS = {
     message: 'Mit der Bestätigung Ihrer Zahlung erklären Sie sich damit einverstanden, dass Removely Ihnen diese und jeweils drei monatliche Zahlungen in Höhe von 49,99 EUR gemäß den AGB belastet. Die Testphase beginnt ab Erhalt. Es gilt zudem das gesetzliche Widerrufsrecht.'
   },
   
-  // 👇 NEUES OFFER: 4 × 25€ ratenzahlung ohne Anzahlung
+  // 4 × 25€ Ratenzahlung ohne Anzahlung
   'ratenzahlung_4x25': {
     name: 'Eye AI – 4× 25€ Ratenzahlung',
     initial_amount: 2500,  // 25€ erste Rate heute
-    trial_days: 0,         // KEIN Trial – direkt nach 30 Tagen nächste Rate
-    restzahlung_price_id: 'price_1TbhkyHRgmyzxSIn3M3NHMJ4',  // 25€/Monat
+    trial_days: 0,         // 0 Tage Übergang -> Webhook setzt den Start nun korrekt auf in 30 Tagen
+    restzahlung_price_id: 'price_1TbhkyHRgmyzxSIn3M3NHMJ4',  // 25€/Monat (bzw. 24,99€)
     iterations: 3,         // 3 weitere Raten (zusätzlich zur ersten heute = 4 gesamt)
     message: 'ㅤ'
   },
-  
-  // Hier kannst du in Zukunft beliebig viele weitere Offers hinzufügen
 };
 
 export default async function handler(req, res) {
@@ -36,7 +34,6 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    // Welches Offer? Default = try_and_buy (für Abwärtskompatibilität)
     const offerKey = (req.body && req.body.offer) || 'try_and_buy';
     const offer = OFFERS[offerKey];
     
