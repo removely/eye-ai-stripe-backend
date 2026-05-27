@@ -55,18 +55,22 @@ export default async function handler(req, res) {
       });
 
       // 3. Subscription Schedule erstellen: 14 Tage Trial → 3x 50€
-      const trialEnd = Math.floor(Date.now() / 1000) + (14 * 24 * 60 * 60);
-      
-      const schedule = await stripe.subscriptionSchedules.create({
-        customer: customerId,
-        start_date: trialEnd,
-        end_behavior: 'cancel',
-        phases: [{
-          items: [{ price: restzahlungPriceId, quantity: 1 }],
-          iterations: 3,
-          default_payment_method: paymentMethodId,
-        }],
-      });
+     // Werte aus Metadata lesen (dynamisch je nach Offer)
+const trialDays = parseInt(session.metadata.trial_days || '14');
+const iterations = parseInt(session.metadata.iterations || '3');
+
+const trialEnd = Math.floor(Date.now() / 1000) + (trialDays * 24 * 60 * 60);
+
+const schedule = await stripe.subscriptionSchedules.create({
+  customer: customerId,
+  start_date: trialEnd,
+  end_behavior: 'cancel',
+  phases: [{
+    items: [{ price: restzahlungPriceId, quantity: 1 }],
+    iterations: iterations,
+    default_payment_method: paymentMethodId,
+  }],
+});
 
       console.log(`✅ Schedule ${schedule.id} angelegt für Customer ${customerId}`);
     } catch (err) {
