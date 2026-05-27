@@ -15,9 +15,9 @@ const OFFERS = {
   },
   
   // 👇 NEUES OFFER: 4 × 25€ ratenzahlung ohne Anzahlung
-  'ratenzahlung_4x25€': {
+  'ratenzahlung_4x25': {
     name: 'Eye AI – 4× 25€ Ratenzahlung',
-    initial_amount: 25,  // 25€ erste Rate heute
+    initial_amount: 2500,  // 25€ erste Rate heute
     trial_days: 0,         // KEIN Trial – direkt nach 30 Tagen nächste Rate
     restzahlung_price_id: 'price_1TbhkyHRgmyzxSIn3M3NHMJ4',  // 25€/Monat
     iterations: 3,         // 3 weitere Raten (zusätzlich zur ersten heute = 4 gesamt)
