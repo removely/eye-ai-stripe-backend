@@ -19,7 +19,7 @@ const OFFERS = {
     name: 'Eye AI – 4× 25€ Ratenzahlung',
     initial_amount: 2500,  // 25€ erste Rate heute
     trial_days: 0,         // KEIN Trial – direkt nach 30 Tagen nächste Rate
-    restzahlung_price_id: 'price_DEINE_NEUE_25EUR_PRICE_ID',  // 25€/Monat
+    restzahlung_price_id: 'price_1TbhkyHRgmyzxSIn3M3NHMJ4',  // 25€/Monat
     iterations: 3,         // 3 weitere Raten (zusätzlich zur ersten heute = 4 gesamt)
     message: 'Mit der Bestätigung Ihrer Zahlung erklären Sie sich damit einverstanden, dass Removely Ihnen diese und drei weitere monatliche Zahlungen in Höhe von 25 EUR gemäß den AGB belastet. Es gilt zudem das gesetzliche Widerrufsrecht.'
   },
