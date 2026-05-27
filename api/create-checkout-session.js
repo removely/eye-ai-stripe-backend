@@ -11,7 +11,7 @@ const OFFERS = {
     trial_days: 14,
     restzahlung_price_id: 'price_1TahnIHRgmyzxSInhDPavGrQ',  // 49,99€/Monat
     iterations: 3,
-    message: 'ㅤㅤ'
+    message: 'Mit der Bestätigung Ihrer Zahlung erklären Sie sich damit einverstanden, dass Removely Ihnen diese und jeweils drei monatliche Zahlungen in Höhe von 49,99 EUR gemäß den AGB belastet. Die Testphase beginnt ab Erhalt. Es gilt zudem das gesetzliche Widerrufsrecht.'
   },
   
   // 👇 NEUES OFFER: 4 × 25€ ratenzahlung ohne Anzahlung
@@ -21,7 +21,7 @@ const OFFERS = {
     trial_days: 0,         // KEIN Trial – direkt nach 30 Tagen nächste Rate
     restzahlung_price_id: 'price_1TbhkyHRgmyzxSIn3M3NHMJ4',  // 25€/Monat
     iterations: 3,         // 3 weitere Raten (zusätzlich zur ersten heute = 4 gesamt)
-    message: 'Mit der Bestätigung Ihrer Zahlung erklären Sie sich damit einverstanden, dass Removely Ihnen diese und drei weitere monatliche Zahlungen in Höhe von 25 EUR gemäß den AGB belastet. Es gilt zudem das gesetzliche Widerrufsrecht.'
+    message: ''
   },
   
   // Hier kannst du in Zukunft beliebig viele weitere Offers hinzufügen
