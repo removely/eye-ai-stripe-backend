@@ -42,7 +42,6 @@ export default async function handler(req, res) {
     const customerId = session.customer;
     const restzahlungPriceId = session.metadata.restzahlung_price_id;
     
-    // 👇 NEU: Trial-Days und Iterations dynamisch aus Metadata
     const trialDays = parseInt(session.metadata.trial_days || '14');
     const iterations = parseInt(session.metadata.iterations || '3');
 
@@ -54,9 +53,10 @@ export default async function handler(req, res) {
         invoice_settings: { default_payment_method: paymentMethodId },
       });
 
-      // 👇 NEU: trial_days dynamisch (0 oder 14 oder beliebig)
-      // Bei trial_days=0 startet die erste Folgerate nach 30 Tagen
-      const trialEnd = Math.floor(Date.now() / 1000) + (trialDays * 24 * 60 * 60);
+      // KORREKTUR: Wenn trialDays === 0 (Ratenzahlung direkt), wurde die 1. Rate heute bezahlt.
+      // Die nächste Folgerate im Ratenplan darf erst in 30 Tagen starten!
+      const effektiveTage = trialDays === 0 ? 30 : trialDays;
+      const trialEnd = Math.floor(Date.now() / 1000) + (effektiveTage * 24 * 60 * 60);
       
       const schedule = await stripe.subscriptionSchedules.create({
         customer: customerId,
@@ -64,12 +64,12 @@ export default async function handler(req, res) {
         end_behavior: 'cancel',
         phases: [{
           items: [{ price: restzahlungPriceId, quantity: 1 }],
-          iterations: iterations,  // 👈 dynamisch
+          iterations: iterations, 
           default_payment_method: paymentMethodId,
         }],
       });
 
-      console.log(`✅ Schedule ${schedule.id} angelegt für Customer ${customerId} (Offer: ${session.metadata.offer_key}, ${trialDays}d Trial, ${iterations} Raten)`);
+      console.log(`✅ Schedule ${schedule.id} angelegt für Customer ${customerId} (Offer: ${session.metadata.offer_key}, ${trialDays}d Trial [Effektiv: ${effektiveTage} Tage bis Start], ${iterations} Raten)`);
     } catch (err) {
       console.error('Fehler beim Schedule-Erstellen:', err);
     }
