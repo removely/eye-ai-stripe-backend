@@ -21,7 +21,7 @@ const OFFERS = {
     trial_days: 0,         // KEIN Trial – direkt nach 30 Tagen nächste Rate
     restzahlung_price_id: 'price_1TbhkyHRgmyzxSIn3M3NHMJ4',  // 25€/Monat
     iterations: 3,         // 3 weitere Raten (zusätzlich zur ersten heute = 4 gesamt)
-    message: ''
+    message: 'ㅤ'
   },
   
   // Hier kannst du in Zukunft beliebig viele weitere Offers hinzufügen
