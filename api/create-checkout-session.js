@@ -11,7 +11,7 @@ const OFFERS = {
     trial_days: 14,
     restzahlung_price_id: 'price_1TahnIHRgmyzxSInhDPavGrQ',  // 49,99€/Monat
     iterations: 3,
-    message: 'ㅤ'
+    message: 'ㅤㅤ'
   },
   
   // 👇 NEUES OFFER: 4 × 25€ ratenzahlung ohne Anzahlung
